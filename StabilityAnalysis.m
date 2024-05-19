@@ -20,8 +20,7 @@ B         = b/(2*Lg);
 sigma     = 2;
 sigmaug   = 3;
 sigmaug_V = sigmaug/V;
-sigmavg   = sigma;
-sigmabg   = sigmavg/V;
+sigmabg   = sigma/V;
 sigmaag   = sigma/V;
 
 Iug0 = 0.0249*sigmaug_V^2;

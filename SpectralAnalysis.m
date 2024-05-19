@@ -5,6 +5,7 @@
 %%
 
 % RUN PREVIOUS SCRIPTS
+clc, clf, clear
 TimeDomainAnalysis;
 close all;
 
@@ -57,102 +58,89 @@ R_r     = dt*fft(rbtV);
 A_Y_r   = dt*fft(a_y_r);
 
 % PSD ESTIMATE
-Pbeta  = (1/T)*( BETA.*conj(BETA));
-Pphi   = (1/T)*(  PHI.*conj(PHI));
-Pp     = (1/T)*(    P.*conj(P));
-Pr     = (1/T)*(    R.*conj(R));
-Pa_y   = (1/T)*(  A_Y.*conj(A_Y)); 
+N_half = floor(N / 2);
+
+Pbeta = (2/T) * abs(BETA(1:N_half)).^2 * 2*V/b;
+Pphi = (2/T) * abs(PHI(1:N_half)).^2;
+Pp = (2/T) * abs(P(1:N_half)).^2 * 2*V/b;
+Pr = (2/T) * abs(R(1:N_half)).^2 * 2*V/b;
+Pa_y = (2/T) * abs(A_Y(1:N_half)).^2 * 2*V/b;
 
 P_all = [Pbeta Pphi Pp Pr Pa_y];
 
-Pbeta_r  = (1/T)*( BETA.*conj(BETA_r));
-Pr_r     = (1/T)*(    R.*conj(R_r));
-Pa_y_r   = (1/T)*(  A_Y.*conj(A_Y_r)); 
+Pbeta_r = (2/T) * abs(BETA_r(1:N_half)).^2;
+Pr_r = (2/T) * abs(R_r(1:N_half)).^2;
+Pa_y_r = (2/T) * abs(A_Y_r(1:N_half)).^2;
 
 P_all_r = [Pbeta_r Pr_r Pa_y_r];
 
 % DEFINE FREQUENCY VECTOR
 fs = 1/dt;                                  % sample frequency
-omega = 2*pi*fs*(0:(N/2)-1)/N;
+omega = 2*pi*fs*(0:N_half-1)/N;
 
 % SMOOTHING FILTER
-Pbeta_s  = zeros((length(Pbeta)),1);
-Pphi_s   = zeros((length(Pphi)),1);
-Pp_s     = zeros((length(Pp)),1);
-Pr_s     = zeros((length(Pr)),1);
-Pa_y_s  = zeros((length(Pa_y)),1);
+filter = [0.25, 0.5, 0.25];
 
-P_all_s = [Pbeta_s Pphi_s Pp_s Pr_s Pa_y_s];
-
-for ii = 1:length(P_all(1,:))
-    for jj = 2:length(Pbeta)-2
-        P_all_s(jj-1,ii) = 0.25*P_all(jj-1,ii)+0.5*P_all(jj,ii)+0.25*P_all(jj+1,ii);
-    end
-end
-
-Pbeta_s_r  = zeros((length(Pbeta_r)),1);
-Pr_s_r     = zeros((length(Pr_r)),1);
-Pa_y_s_r  = zeros((length(Pa_y_r)),1);
-
-P_all_s_r = [Pbeta_s_r Pr_s_r Pa_y_s_r];
-
-for ii = 1:length(Periodograms_r(1,:))
-    for jj = 2:length(Pbetar)-2
-        P_all_s_r(jj-1,ii) = 0.25*P_all_r(jj-1,ii)+0.5*P_all_r(jj,ii)+0.25*P_all_r(jj+1,ii);
-    end
-end
+P_all_s = conv2(P_all, filter(:), 'valid');
+P_all_s_r = conv2(P_all_r, filter(:), 'valid');
 
 % PLOTS
 figure(14)
-loglog(omega,Pbeta (1:N/2),'-',omega(1:length(omega)-1),P_all_s(1:N/2-1,1),w,Sxx(:,1),'k') 
-axis(10.^[-1 2 -12 -2]); xlabel('omega [rad/s]'); ylabel('Controlled S_\beta_\beta[rad^2/rad/s]');
-legend('Experimental Periodogram','Smoothed Periodogram','Analytical PSD')
 grid on
+loglog(omega,Pbeta(1:N/2),omega(1:length(omega)-2),P_all_s(1:N/2-2,1),w,Sxx(:,1),'k--') 
+axis(10.^[-1 2 -12 -2]); xlabel('Frequency - \omega [rad/s]'); ylabel('Controlled S_{\beta\beta} [rad^2/rad/s]');
+legend('Periodogram','Smoothed Periodogram','Analytical PSD')
+
 figure(15)
-loglog(omega,Pphi(1:N/2),'-',omega(1:length(omega)-1),P_all_s(1:N/2-1,2),w,Sxx(:,2),'k');
-axis(10.^[-1 2 -12 0]); xlabel('omega [rad/s]'); ylabel('Controlled S_\phi_\phi [rad^2/rad/s]')
-legend('Experimental Periodogram','Smoothed Periodogram','Analytical PSD')
 grid on
+loglog(omega,Pphi(1:N/2),omega(1:length(omega)-2),P_all_s(1:N/2-2,2),w,Sxx(:,2),'k--');
+axis(10.^[-1 2 -10 0]); xlabel('Frequency - \omega [rad/s]'); ylabel('Controlled S_{\phi\phi} [rad^2/rad/s]')
+legend('Periodogram','Smoothed Periodogram','Analytical PSD')
+
 figure(16)
-loglog(omega,Pp(1:N/2),'-',omega(1:length(omega)-1),P_all_s(1:N/2-1,3),w,Sxx(:,3),'k');
-axis(10.^[-1 2 -12 -2]); xlabel('omega [rad/s]'); ylabel('Controlled S_p_p [rad^2/rad/s]')
-legend('Experimental Periodogram','Smoothed Periodogram','Analytical PSD')
 grid on
+loglog(omega,Pp(1:N/2),omega(1:length(omega)-2),P_all_s(1:N/2-2,3),w,Sxx(:,3),'k--');
+axis(10.^[-1 2 -12 -2]); xlabel('Frequency - \omega [rad/s]'); ylabel('Controlled S_{pp} [rad^2/rad/s]')
+legend('Periodogram','Smoothed Periodogram','Analytical PSD')
+
 figure(17)
-loglog(omega,Pr(1:N/2),'-',omega(1:length(omega)-1),P_all_s(1:N/2-1,4),w,Sxx(:,4),'k');
-axis(10.^[-1 2 -12 -2]); xlabel('omega [rad/s]'); ylabel('Controlled S_r_r [rad^2/rad/s]')
-legend('Experimental Periodogram','Smoothed Periodogram','Analytical PSD')
 grid on
+loglog(omega,Pr(1:N/2),omega(1:length(omega)-2),P_all_s(1:N/2-2,4),w,Sxx(:,4),'k--');
+axis(10.^[-1 2 -14 -2]); xlabel('Frequency - \omega [rad/s]'); ylabel('Controlled S_{rr} [rad^2/rad/s]')
+legend('Periodogram','Smoothed Periodogram','Analytical PSD')
+
 figure(18)
-loglog(omega,Pa_y(1:N/2),'-',omega(1:length(omega)-1),P_all_s(1:N/2-1,5),w,Sxx(:,5),'k');
-axis(10.^[-1 2 -10 5]); xlabel('omega [rad/s]'); ylabel('Controlled S_a_a [(m/s^2)^2/rad/s]')
-legend('Experimental Periodogram','Smoothed Periodogram','Analytical PSD')
 grid on
+loglog(omega,Pa_y(1:N/2),omega(1:length(omega)-2),P_all_s(1:N/2-2,5),w,Sxx(:,5),'k--');
+axis(10.^[-1 2 -6 4]); xlabel('Frequency - \omega [rad/s]'); ylabel('Controlled S_{aa} [(m/s^2)^2/rad/s]')
+legend('Periodogram','Smoothed','Analytical')
 
 figure(19)
+grid on
+loglog(omega,Pbeta_r(1:N/2),omega(1:length(omega)-2),P_all_s_r(1:N/2-2,1),w,Sxx(:,1),'k--') 
+axis(10.^[-1 2 -12 -2]); xlabel('Frequency - \omega [rad/s]'); ylabel('Reduced S_{\beta\beta} [rad^2/rad/s]');
+legend('Periodogram','Smoothed','Analytical')
+
+figure(20)
+grid on
+loglog(omega,Pr_r(1:N/2),omega(1:length(omega)-2),P_all_s_r(1:N/2-2,2),w,Sxx(:,2),'k--');
+axis(10.^[-1 2 -14 0]); xlabel('Frequency - \omega [rad/s]'); ylabel('Reduced S_{rr} [rad^2/rad/s]')
+legend('Periodogram','Smoothed','Analytical')
+
+figure(21)
+grid on
+loglog(omega,Pa_y_r(1:N/2),omega(1:length(omega)-2),P_all_s_r(1:N/2-2,3),w,Sxx(:,3),'k--');
+axis(10.^[-1 2 -10 0]); xlabel('Frequency - \omega [rad/s]'); ylabel('Reduced S_{aa} [(m/s^2)^2/rad/s]')
+legend('Periodogram','Smoothed','Analytical')
+
+figure(22)
 bode(A_cl,B,C(1,:),D(1,:),4,w)
 hold on
 bode(A_cl,B,C(1,:),D(1,:),5,w)
-legend('lateral turbulence','vertical turbulence')
+legend('Longitudinal Acceleration - u_g','Vertical Acceleration - w_g')
 
-figure(20)
+figure(23)
 bode(A_cl,B,C(4,:),D(4,:),4,w)
 hold on
 bode(A_cl,B,C(4,:),D(4,:),5,w)
-legend('lateral turbulence','vertical turbulence')
-
-figure(21)
-loglog(omega,Pbeta_r (1:N/2),'-',omega(1:length(omega)-1),P_all_s_r(1:N/2-1,1),w,Sxx(:,1),'k') 
-axis(10.^[-1 2 -12 -2]); xlabel('omega [rad/s]'); ylabel('Reduced S_\beta_\beta[rad^2/rad/s]');
-legend('Experimental Periodogram','Smoothed Periodogram','Analytical PSD')
-grid on
-figure(24)
-loglog(omega,Pr_r(1:N/2),'-',omega(1:length(omega)-1),P_all_s_r(1:N/2-1,2),w,Sxx(:,2),'k');
-axis(10.^[-1 2 -12 -2]); xlabel('omega [rad/s]'); ylabel('Reduced S_r_r [rad^2/rad/s]')
-legend('Experimental Periodogram','Smoothed Periodogram','Analytical PSD')
-grid on
-figure(25)
-loglog(omega,Pa_y_r(1:N/2),'-',omega(1:length(omega)-1),P_all_s_r(1:N/2-1,3),w,Sxx(:,3),'k');
-axis(10.^[-1 2 -10 5]); xlabel('omega [rad/s]'); ylabel('Reduced S_a_a [(m/s^2)^2/rad/s]')
-legend('Experimental Periodogram','Smoothed Periodogram','Analytical PSD')
-grid on
+legend('Longitudinal Acceleration - u_g','Vertical Acceleration - w_g')

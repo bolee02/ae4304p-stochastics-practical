@@ -8,7 +8,7 @@
 StabilityAnalysis;
 close all;
 
-dt = 0.005; T  = 60; t = 0:dt:T; N = length(t);
+dt = 0.01; T  = 60; t = 0:dt:T; N = length(t);
 nn = zeros(1,N);
 
 % TURBULENCE INPUTS
