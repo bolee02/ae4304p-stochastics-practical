@@ -9,43 +9,44 @@ SpectralAnalysis;
 close all;
 
 dw = diff(w);
+domega = diff(omega);
+
 dw(length(dw)+1) = 0;
+domega(length(domega)+1) = 0;
 
 % ANALYTICAL POWER SPECTRA VARIANCE
-var__beta_c = sum(Sxx(:,1)'.*dw)/pi;
-var__phi_c = sum(Sxx(:,2)'.*dw)/pi;
-var__pbv_c = sum(Sxx(:,3)'.*dw)/pi;
-var__rbv_c = sum(Sxx(:,4)'.*dw)/pi;
-var__ay_c = sum(Sxx(:,5)'.*dw)/pi;
+var_beta = sum(Sxx(:,1)'.*dw)/pi;
+var_phi = sum(Sxx(:,2)'.*dw)/pi;
+var_pp = sum(Sxx(:,3)'.*dw)/pi;
+var_rr = sum(Sxx(:,4)'.*dw)/pi;
+var_a_y = sum(Sxx(:,5)'.*dw)/pi;
 
-ana = [var__beta_c var__phi_c var__pbv_c var__rbv_c var__ay_c];
-
-var__beta_r = sum(Sxx_r(:,1)'.*dw)/pi;
-var__rbv_r = sum(Sxx_r(:,2)'.*dw)/pi;
-var__ay_r = sum(Sxx_r(:,3)'.*dw)/pi;
-
-ana_r = [var__beta_r var__rbv_r var__ay_r];
+var_beta_r = sum(Sxx_r(:,1)'.*dw)/pi;
+var_rr_r = sum(Sxx_r(:,2)'.*dw)/pi;
+var_a_y_r = sum(Sxx_r(:,3)'.*dw)/pi;
 
 % EXPERIMENTAL POWER SPECTRA VARIANCE
-var__beta_c_e = sum(Pbeta'.*dw)/pi;
-var__phi_c_e = sum(Pphi(:,2)'.*dw)/pi;
-var__pbv_c_e = sum(Pp(:,3)'.*dw)/pi;
-var__rbv_c_e = sum(Pr(:,4)'.*dw)/pi;
-var__ay_c_e = sum(Pa_y(:,5)'.*dw)/pi;
+var_beta_c_e = sum(Pbeta(1:length(domega))'.*domega)/pi;
+var_phi_c_e = sum(Pphi(1:length(domega))'.*domega)/pi;
+var_pp_c_e = sum(Pp(1:length(domega))'.*domega)/pi;
+var_rr_c_e = sum(Pr(1:length(domega))'.*domega)/pi;
+var_a_y_c_e = sum(Pa_y(1:length(domega))'.*domega)/pi;
 
-var__beta_c_es = sum(Pbeta_s(:,1)'.*dw)/pi;
-var__rbv_c_es = sum(Pr_s(:,2)'.*dw)/pi;
-var__ay_c_es = sum(Pa_y_s(:,3)'.*dw)/pi;
+var_beta_c_es = sum(P_all_s(1:length(domega)-2,1)'.*domega(1:length(domega)-2))/pi;
+var_phi_c_es = sum(P_all_s(1:length(domega)-2,2)'.*domega(1:length(domega)-2))/pi;
+var_pp_c_es = sum(P_all_s(1:length(domega)-2,3)'.*domega(1:length(domega)-2))/pi;
+var_rr_c_es = sum(P_all_s(1:length(domega)-2,4)'.*domega(1:length(domega)-2))/pi;
+var_a_y_c_es = sum(P_all_s(1:length(domega)-2,5)'.*domega(1:length(domega)-2))/pi;
 
 % VARIANCE FROM var.m
-vbeta_c  = var(beta_c);
-vphi_c  = var(y(:,2));
+var_beta_f  = var(y(:,1));
+var_phi_f  = var(y(:,2));
 vpbv_c  = var(y(:,3));
 vrbv_c  = var(y(:,4));
-vay_c  = var(a_y);
+vay_c  = var(y(:,5));
 var_f = [vbeta_c vphi_c vpbv_c vrbv_c vay_c ];
 
-vbeta_r  = var(ytr1(:,1));
-vrbv_r  = var(ytr1(:,2));
-vay_r  = var(a_y_r);
+vbeta_r  = var(y_r(:,1));
+vrbv_r  = var(y_r(:,2));
+vay_r  = var(y_r(:,3));
 var_r = [vbeta_r vrbv_r vay_r];
