@@ -115,6 +115,8 @@ sys_ol = ss(A,B,C,D);
 figure(1)
 pzmap(sys_ol)
 grid on
+set(gcf,'color','white')
+export_fig('pzmap_ol', '-png', '-r300', '-nocrop')
 
 % SHOW EIGENVALUES OF THE REDUCED SYSTEM
 A_r = [yb  yr 0    0    0    0    ybg  0;
@@ -145,6 +147,8 @@ sys_r = ss(A_r, B_r, C_r, D_r);
 figure(2)
 pzmap(sys_r)
 grid on
+set(gcf,'color','white')
+export_fig('pzmap_r', '-png', '-r300', '-nocrop')
 
 % SHOW EIGENVALUES OF THE CONTROLLED SYSTEM
 Kphi = -0.1;
@@ -156,3 +160,5 @@ sys_cl = ss(A_cl, B, C, D);
 figure(3)
 pzmap(sys_cl)
 grid on
+set(gcf,'color','white')
+export_fig('pzmap_cl', '-png', '-r300', '-nocrop')

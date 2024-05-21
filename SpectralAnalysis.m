@@ -14,17 +14,17 @@ w = logspace(-2,2,300);
 
 % COMPUTE ANALYTIC POWER SPECTRAL DENSITIES
 % RESPONSE TO HORIZONTAL LATERAL TURBULENCE
-temp = bode(A_cl,B,C(1,:),D(1,:),4,w)+bode(A_cl,B,C(1,:),D(1,:),5,w); Sbeta  = temp.*temp;
-temp = bode(A_cl,B,C(2,:),D(2,:),4,w)+bode(A_cl,B,C(2,:),D(2,:),5,w); Sphi   = temp.*temp;
-temp = bode(A_cl,B,C(3,:),D(3,:),4,w)+bode(A_cl,B,C(3,:),D(3,:),5,w); Spp    = temp.*temp;
-temp = bode(A_cl,B,C(4,:),D(4,:),4,w)+bode(A_cl,B,C(4,:),D(4,:),5,w); Srr    = temp.*temp;
-temp = bode(A_cl,B,C(5,:),D(5,:),4,w)+bode(A_cl,B,C(5,:),D(5,:),5,w); Sa_y   = temp.*temp;
+temp = bode(A_cl,B,C(1,:),D(1,:),3,w)+bode(A_cl,B,C(1,:),D(1,:),4,w); Sbeta  = temp.*temp;
+temp = bode(A_cl,B,C(2,:),D(2,:),3,w)+bode(A_cl,B,C(2,:),D(2,:),4,w); Sphi   = temp.*temp;
+temp = bode(A_cl,B,C(3,:),D(3,:),3,w)+bode(A_cl,B,C(3,:),D(3,:),4,w); Spp    = temp.*temp;
+temp = bode(A_cl,B,C(4,:),D(4,:),3,w)+bode(A_cl,B,C(4,:),D(4,:),4,w); Srr    = temp.*temp;
+temp = bode(A_cl,B,C(5,:),D(5,:),3,w)+bode(A_cl,B,C(5,:),D(5,:),4,w); Sa_y   = temp.*temp;
 
 Sxx  = [Sbeta Sphi Spp Srr Sa_y];
 
-temp = bode(A_r,B_r,C_r(1,:),D_r(1,:),4,w)+bode(A_r,B_r,C_r(1,:),D_r(1,:),5,w); Sbeta_r  = temp.*temp;
-temp = bode(A_r,B_r,C_r(2,:),D_r(2,:),4,w)+bode(A_r,B_r,C_r(2,:),D_r(2,:),5,w); Srr_r   = temp.*temp;
-temp = bode(A_r,B_r,C_r(3,:),D_r(3,:),4,w)+bode(A_r,B_r,C_r(3,:),D_r(3,:),5,w); Sa_y_r    = temp.*temp;
+temp = bode(A_r,B_r,C_r(1,:),D_r(1,:),3,w)+bode(A_r,B_r,C_r(1,:),D_r(1,:),4,w); Sbeta_r  = temp.*temp;
+temp = bode(A_r,B_r,C_r(2,:),D_r(2,:),3,w)+bode(A_r,B_r,C_r(2,:),D_r(2,:),4,w); Srr_r   = temp.*temp;
+temp = bode(A_r,B_r,C_r(3,:),D_r(3,:),3,w)+bode(A_r,B_r,C_r(3,:),D_r(3,:),4,w); Sa_y_r    = temp.*temp;
 
 Sxx_r = [Sbeta_r Srr_r Sa_y_r];
 
@@ -60,11 +60,11 @@ A_Y_r   = dt*fft(a_y_r);
 % PSD ESTIMATE
 N_half = floor(N / 2);
 
-Pbeta = (2/T) * abs(BETA(1:N_half)).^2 * 2*V/b;
+Pbeta = (2/T) * abs(BETA(1:N_half)).^2;
 Pphi = (2/T) * abs(PHI(1:N_half)).^2;
-Pp = (2/T) * abs(P(1:N_half)).^2 * 2*V/b;
-Pr = (2/T) * abs(R(1:N_half)).^2 * 2*V/b;
-Pa_y = (2/T) * abs(A_Y(1:N_half)).^2 * 2*V/b;
+Pp = (2/T) * abs(P(1:N_half)).^2;
+Pr = (2/T) * abs(R(1:N_half)).^2;
+Pa_y = (2/T) * abs(A_Y(1:N_half)).^2;
 
 P_all = [Pbeta Pphi Pp Pr Pa_y];
 
