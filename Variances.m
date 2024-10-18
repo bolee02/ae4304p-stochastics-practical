@@ -15,38 +15,54 @@ dw(length(dw)+1) = 0;
 domega(length(domega)+1) = 0;
 
 % ANALYTICAL POWER SPECTRA VARIANCE
-var_beta = sum(Sxx(:,1)'.*dw)/pi;
-var_phi = sum(Sxx(:,2)'.*dw)/pi;
-var_pp = sum(Sxx(:,3)'.*dw)/pi;
-var_rr = sum(Sxx(:,4)'.*dw)/pi;
-var_a_y = sum(Sxx(:,5)'.*dw)/pi;
+var_beta_u = sum(Sxx_u(:,1)'.*dw)/pi;
+var_phi_u = sum(Sxx_u(:,2)'.*dw)/pi;
+var_pp_u = sum(Sxx_u(:,3)'.*dw)/pi;
+var_rr_u = sum(Sxx_u(:,4)'.*dw)/pi;
+var_a_y_u = sum(Sxx_u(:,5)'.*dw)/pi;
 
-var_beta_r = sum(Sxx_r(:,1)'.*dw)/pi;
-var_rr_r = sum(Sxx_r(:,2)'.*dw)/pi;
-var_a_y_r = sum(Sxx_r(:,3)'.*dw)/pi;
+var_beta_w = sum(Sxx_w(:,1)'.*dw)/pi;
+var_phi_w = sum(Sxx_w(:,2)'.*dw)/pi;
+var_pp_w = sum(Sxx_w(:,3)'.*dw)/pi;
+var_rr_w = sum(Sxx_w(:,4)'.*dw)/pi;
+var_a_y_w = sum(Sxx_w(:,5)'.*dw)/pi;
 
 % EXPERIMENTAL POWER SPECTRA VARIANCE
-var_beta_c_e = sum(Pbeta(1:length(domega))'.*domega)/pi;
-var_phi_c_e = sum(Pphi(1:length(domega))'.*domega)/pi;
-var_pp_c_e = sum(Pp(1:length(domega))'.*domega)/pi;
-var_rr_c_e = sum(Pr(1:length(domega))'.*domega)/pi;
-var_a_y_c_e = sum(Pa_y(1:length(domega))'.*domega)/pi;
+var_beta_c_e_u = sum(Pbeta_u(1:length(domega))'.*domega)/pi;
+var_phi_c_e_u = sum(Pphi_u(1:length(domega))'.*domega)/pi;
+var_pp_c_e_u = sum(Pp_u(1:length(domega))'.*domega)/pi;
+var_rr_c_e_u = sum(Pr_u(1:length(domega))'.*domega)/pi;
+var_a_y_c_e_u = sum(Pa_y_u(1:length(domega))'.*domega)/pi;
 
-var_beta_c_es = sum(P_all_s(1:length(domega)-2,1)'.*domega(1:length(domega)-2))/pi;
-var_phi_c_es = sum(P_all_s(1:length(domega)-2,2)'.*domega(1:length(domega)-2))/pi;
-var_pp_c_es = sum(P_all_s(1:length(domega)-2,3)'.*domega(1:length(domega)-2))/pi;
-var_rr_c_es = sum(P_all_s(1:length(domega)-2,4)'.*domega(1:length(domega)-2))/pi;
-var_a_y_c_es = sum(P_all_s(1:length(domega)-2,5)'.*domega(1:length(domega)-2))/pi;
+var_beta_c_e_w = sum(Pbeta_w(1:length(domega))'.*domega)/pi;
+var_phi_c_e_w = sum(Pphi_w(1:length(domega))'.*domega)/pi;
+var_pp_c_e_w = sum(Pp_w(1:length(domega))'.*domega)/pi;
+var_rr_c_e_w = sum(Pr_w(1:length(domega))'.*domega)/pi;
+var_a_y_c_e_w = sum(Pa_y_w(1:length(domega))'.*domega)/pi;
+
+var_beta_c_es_u = sum(P_all_s_u(1:length(domega)-2,1)'.*domega(1:length(domega)-2))/pi;
+var_phi_c_es_u = sum(P_all_s_u(1:length(domega)-2,2)'.*domega(1:length(domega)-2))/pi;
+var_pp_c_es_u = sum(P_all_s_u(1:length(domega)-2,3)'.*domega(1:length(domega)-2))/pi;
+var_rr_c_es_u = sum(P_all_s_u(1:length(domega)-2,4)'.*domega(1:length(domega)-2))/pi;
+var_a_y_c_es_u = sum(P_all_s_u(1:length(domega)-2,5)'.*domega(1:length(domega)-2))/pi;
+
+var_beta_c_es_w = sum(P_all_s_w(1:length(domega)-2,1)'.*domega(1:length(domega)-2))/pi;
+var_phi_c_es_w = sum(P_all_s_w(1:length(domega)-2,2)'.*domega(1:length(domega)-2))/pi;
+var_pp_c_es_w = sum(P_all_s_w(1:length(domega)-2,3)'.*domega(1:length(domega)-2))/pi;
+var_rr_c_es_w = sum(P_all_s_w(1:length(domega)-2,4)'.*domega(1:length(domega)-2))/pi;
+var_a_y_c_es_w = sum(P_all_s_w(1:length(domega)-2,5)'.*domega(1:length(domega)-2))/pi;
 
 % VARIANCE FROM var.m
-var_beta_f  = var(y(:,1));
-var_phi_f  = var(y(:,2));
-vpbv_c  = var(y(:,3));
-vrbv_c  = var(y(:,4));
-vay_c  = var(y(:,5));
-var_f = [vbeta_c vphi_c vpbv_c vrbv_c vay_c ];
+var_beta_f_u  = var(y_u(:,1));
+var_phi_f_u  = var(y_u(:,2));
+var_pbv_f_u  = var(y_u(:,3));
+var_rbv_f_u  = var(y_u(:,4));
+var_ay_f_u  = var(y_u(:,5));
+var_f_u = [var_beta_f_u var_phi_f_u var_pbv_f_u var_rbv_f_u var_ay_f_u];
 
-vbeta_r  = var(y_r(:,1));
-vrbv_r  = var(y_r(:,2));
-vay_r  = var(y_r(:,3));
-var_r = [vbeta_r vrbv_r vay_r];
+var_beta_f_w  = var(y_w(:,1));
+var_phi_f_w  = var(y_w(:,2));
+var_pbv_f_w  = var(y_w(:,3));
+var_rbv_f_w  = var(y_w(:,4));
+var_ay_f_w  = var(y_w(:,5));
+var_f_w = [var_beta_f_w var_phi_f_w var_pbv_f_w var_rbv_f_w var_ay_f_w];

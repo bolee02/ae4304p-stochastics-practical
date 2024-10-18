@@ -32,103 +32,118 @@ D = [0 0 0 0 0;
      0 0 0 0 0;
      0 0 0 0 0];
 
-C_r= [1 0 0 0 0 0 0 0;
-      0 1 0 0 0 0 0 0;
-      V*yb V*(yr+2*V/b) 0 0 0 0 V*ybg 0];
-
-D_r = [0 0 0 0 0;
-       0 0 0 0 0;
-       0 0 0 0 0];
-
 % RESPONSE to u_g
-y1 = lsim(A_cl,B,C,D,u1,t);
-y1_r = lsim(A_r,B_r,C_r,D_r,u1,t);
+y_u = lsim(A_cl,B,C,D,u1,t);
 
 % RESPONSE to w_g
-y2 = lsim(A_cl,B,C,D,u2,t);
-y2_r = lsim(A_r,B_r,C_r,D_r,u2,t);
+y_w = lsim(A_cl,B,C,D,u2,t);
 
-% RESPONSE to all together (linear system!)
-yt = y1+y2;
-yt_r = y1_r+y2_r;
-
-% PLOT RESULTS
+% PLOT RESULTS for y_u
 figure(4)
 grid on
-plot(t, yt)
+plot(t, y_u)
 xlabel('Time [s]')
-ylabel('Response - y_{cl}')
+ylabel('Response - y_u')
 set(gcf,'color','white')
-export_fig('timedomain_ycl', '-png', '-r300', '-nocrop')
+legend({'\beta_u', '\phi_u', 'pb/2V_u', 'rb/2V_u', 'a_{y_u}'})
+export_fig('timedomain_y_u', '-png', '-r300', '-nocrop')
 
 figure(5)
 grid on
-plot(t, yt(:,5))
+plot(t, y_u(:,5))
 xlabel('Time [s]')
-ylabel('Lateral acceleration - a_{y_{cl}} [m/s^2]')
+ylabel('Lateral acceleration - a_{y_u} [m/s^2]')
 set(gcf,'color','white')
-export_fig('timedomain_aycl', '-png', '-r300', '-nocrop')
+legend('a_{y_u}')
+export_fig('timedomain_ay_u', '-png', '-r300', '-nocrop')
 
 figure(6)
 grid on
-plot(t, yt(:,1))
+plot(t, y_u(:,1))
 xlabel('Time [s]')
-ylabel('Sidelip - \beta_{cl} [rad/s]')
+ylabel('Sidelip - \beta_u [rad]')
 set(gcf,'color','white')
-export_fig('timedomain_betacl', '-png', '-r300', '-nocrop')
+legend('\beta_u')
+export_fig('timedomain_beta_u', '-png', '-r300', '-nocrop')
 
 figure(7)
 grid on
-plot(t, yt(:,4))
+plot(t, y_u(:,4))
 xlabel('Time [s]')
-ylabel('rb/2V_{cl} [rad/s]')
+ylabel('rb/2V_u [rad]')
 set(gcf,'color','white')
-export_fig('timedomain_rbcl', '-png', '-r300', '-nocrop')
+legend('rb/2V_u')
+export_fig('timedomain_rb_u', '-png', '-r300', '-nocrop')
 
 figure(8)
 grid on
-plot(t, yt(:,2))
+plot(t, y_u(:,2))
 xlabel('Time [s]')
-ylabel('Roll - \phi [rad/s]')
+ylabel('Roll - \phi_u [rad]')
 set(gcf,'color','white')
-export_fig('timedomain_phicl', '-png', '-r300', '-nocrop')
+legend('\phi_u')
+export_fig('timedomain_phi_u', '-png', '-r300', '-nocrop')
 
 figure(9)
 grid on
-plot(t, yt(:,3))
+plot(t, y_u(:,3))
 xlabel('Time [s]')
-ylabel('pb/2V [rad/s]')
+ylabel('pb/2V_u [rad]')
 set(gcf,'color','white')
-export_fig('timedomain_pbcl', '-png', '-r300', '-nocrop')
+legend('pb/2V_u')
+export_fig('timedomain_pb_u', '-png', '-r300', '-nocrop')
 
+% PLOT RESULTS for y_w
 figure(10)
 grid on
-plot(t, yt_r)
+plot(t, y_w)
 xlabel('Time [s]')
-ylabel('Response - y_{r}')
+ylabel('Response - y_w')
 set(gcf,'color','white')
-export_fig('timedomain_yr', '-png', '-r300', '-nocrop')
+legend({'\beta_w', '\phi_w', 'pb/2V_w', 'rb/2V_w', 'a_{y_w}'})
+export_fig('timedomain_y_w', '-png', '-r300', '-nocrop')
 
 figure(11)
 grid on
-plot(t, yt_r(:,3))
+plot(t, y_w(:,1))
 xlabel('Time [s]')
-ylabel('Lateral acceleration - a_{y_{r}} [m/s^2]')
+ylabel('Sidelip - \beta_w [rad]')
 set(gcf,'color','white')
-export_fig('timedomain_ayr', '-png', '-r300', '-nocrop')
+legend('\beta_w')
+export_fig('timedomain_beta_w', '-png', '-r300', '-nocrop')
 
 figure(12)
 grid on
-plot(t, yt_r(:,1))
+plot(t, y_w(:,2))
 xlabel('Time [s]')
-ylabel('Sidelip - \beta_{r} [rad/s]')
+ylabel('Roll - \phi_w [rad]')
 set(gcf,'color','white')
-export_fig('timedomain_betar', '-png', '-r300', '-nocrop')
+legend('\phi_w')
+export_fig('timedomain_phi_w', '-png', '-r300', '-nocrop')
 
 figure(13)
 grid on
-plot(t, yt_r(:,2))
+plot(t, y_w(:,3))
 xlabel('Time [s]')
-ylabel('rb/2V_{r} [rad/s]')
+ylabel('pb/2V_w [rad]')
 set(gcf,'color','white')
-export_fig('timedomain_rbr', '-png', '-r300', '-nocrop')
+legend('pb/2V_w')
+export_fig('timedomain_pb_w', '-png', '-r300', '-nocrop')
+
+figure(14)
+grid on
+plot(t, y_w(:,4))
+xlabel('Time [s]')
+ylabel('rb/2V_w [rad]')
+set(gcf,'color','white')
+legend('rb/2V_w')
+export_fig('timedomain_rb_w', '-png', '-r300', '-nocrop')
+
+figure(15)
+grid on
+plot(t, y_w(:,5))
+xlabel('Time [s]')
+ylabel('Lateral acceleration - a_{y_w} [m/s^2]')
+set(gcf,'color','white')
+legend('a_{y_w}')
+export_fig('timedomain_ay_w', '-png', '-r300', '-nocrop')
